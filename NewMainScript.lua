@@ -29,8 +29,8 @@ local function displayErrorPopup(text, func)
 	setidentity(oldidentity)
 end
 
-local function vapeGithubRequest(scripturl)
-	if not isfile("vape/"..scripturl) then
+local function encryptionGithubRequest(scripturl)
+	if not isfile("-encryption/"..scripturl) then
 		local suc, res
 		task.delay(15, function()
 			if not res and not errorPopupShown then 
@@ -38,20 +38,20 @@ local function vapeGithubRequest(scripturl)
 				displayErrorPopup("The connection to github is taking a while, Please be patient.")
 			end
 		end)
-		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
+		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/mnxxn/-encryption/"..readfile("-encryption/commithash.txt").."/"..scripturl, true) end)
 		if not suc or res == "404: Not Found" then
-			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
+			displayErrorPopup("Failed to connect to github : -encryption/"..scripturl.." : "..res)
 			error(res)
 		end
 		if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
-		writefile("vape/"..scripturl, res)
+		writefile("-encryption/"..scripturl, res)
 	end
-	return readfile("vape/"..scripturl)
+	return readfile("-encryption/"..scripturl)
 end
 
-if not shared.VapeDeveloper then 
+if not shared.EncryptionDeveloper then 
 	local commit = "main"
-	for i,v in pairs(game:HttpGet("https://github.com/7GrandDadPGN/VapeV4ForRoblox"):split("\n")) do 
+	for i,v in pairs(game:HttpGet("https://https://github.com/mnxxn/-encryption"):split("\n")) do 
 		if v:find("commit") and v:find("fragment") then 
 			local str = v:split("/")[5]
 			commit = str:sub(0, str:find('"') - 1)
@@ -60,31 +60,31 @@ if not shared.VapeDeveloper then
 	end
 	if commit then
 		if isfolder("vape") then 
-			if ((not isfile("vape/commithash.txt")) or (readfile("vape/commithash.txt") ~= commit or commit == "main")) then
-				for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
+			if ((not isfile("-encryption/commithash.txt")) or (readfile("-encryption/commithash.txt") ~= commit or commit == "main")) then
+				for i,v in pairs({"-encryption/Universal.lua", "-encryption/MainScript.lua", "-encryption/GuiLibrary.lua"}) do 
 					if isfile(v) and readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
 						delfile(v)
 					end 
 				end
-				if isfolder("vape/CustomModules") then 
-					for i,v in pairs(listfiles("vape/CustomModules")) do 
+				if isfolder("-encryption/CustomModules") then 
+					for i,v in pairs(listfiles("-encryption/CustomModules")) do 
 						if isfile(v) and readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
 							delfile(v)
 						end 
 					end
 				end
-				if isfolder("vape/Libraries") then 
-					for i,v in pairs(listfiles("vape/Libraries")) do 
+				if isfolder("-encryption/Libraries") then 
+					for i,v in pairs(listfiles("-encryption/Libraries")) do 
 						if isfile(v) and readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
 							delfile(v)
 						end 
 					end
 				end
-				writefile("vape/commithash.txt", commit)
+				writefile("-encryption/commithash.txt", commit)
 			end
 		else
 			makefolder("vape")
-			writefile("vape/commithash.txt", commit)
+			writefile("-encryption/commithash.txt", commit)
 		end
 	else
 		displayErrorPopup("Failed to connect to github, please try using a VPN.")
@@ -92,4 +92,4 @@ if not shared.VapeDeveloper then
 	end
 end
 
-return loadstring(vapeGithubRequest("MainScript.lua"))()
+return loadstring(encryptionGithubRequest("MainScript.lua"))()
