@@ -1,0 +1,6 @@
+local WhitelistedUsers = {
+	User1= {Name = "verycoolaccount24"},
+	User2= {Name = "veryrarekid0"},
+}
+
+return WhitelistedUsers
