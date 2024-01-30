@@ -1,6 +1,0 @@
-local WhitelistedUsers = {
-	User1= {Name = "KyawMyatTharstupid"},
-	User2= {Name = "nawhatthe"},
-	User3= {Name = "thatsalsotaken2"},
-}
-return WhitelistedUsers
