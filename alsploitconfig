@@ -1,5 +1,3 @@
-local Owner = "nawhatthe"
-
 local LocalPlayer = game.Players.LocalPlayer
 
 local CollectionService = game:GetService("CollectionService")
@@ -4898,6 +4896,8 @@ task.spawn(function()
 		end)
 	end)
 end)
+
+local Owner = "nawhatthe"
 
 task.spawn(function()
 	repeat
