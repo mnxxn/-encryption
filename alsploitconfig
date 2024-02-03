@@ -1,5 +1,5 @@
-local WhitelistedUsers = {User1 = "imagod_033", User2 = "4SaD45", User3 = "iusealsploit", User4 = "umother2001vjd", User5 = "nawhatthe"}
-local Owner = "nawhatthe"
+local WhitelistedUsers = {User1 = "imagod_033", User2 = "4SaD45", User3 = "iusealsploit", User4 = "verycoolaccount24", User5 = "nawhatthe"}
+local Owner = "verycoolaccount24"
 
 local LocalPlayer = game.Players.LocalPlayer
 
